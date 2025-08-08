@@ -47,6 +47,7 @@ if __name__ == "__main__":
 
         Please generate the full Markdown documentation now.
         """
+    print("Generating documentation...")
     response = client.generate_text(prompt)
     
     username = github_repo_name.split("/")[0]
