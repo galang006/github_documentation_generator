@@ -5,7 +5,8 @@ import os
 if __name__ == "__main__":
     output_path = "./documentation_output"
     os.makedirs(output_path, exist_ok=True)
-    github_repo_url = "https://github.com/galang006/github_documentation_generator"
+    github_repo_url = input("Enter the GitHub repository URL (https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME): ")
+
 
     github_repo_name = github_repo_url.split("github.com/")[1]
     code = get_github_code(github_repo_name)
