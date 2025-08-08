@@ -47,25 +47,29 @@ To set up and run this project locally, follow these steps:
 
 Once installed and configured, you can run the application to generate documentation for a GitHub repository.
 
-1.  **Modify `main.py` (Optional, for different repositories)**:
-    By default, `main.py` is configured to generate documentation for `https://github.com/galang006/water_level_measurement`. To generate documentation for a different repository, open `main.py` and update the `github_repo_url` variable:
-
-    ```python
-    # main.py
-    # ...
-    github_repo_url = "https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME"
-    # ...
-    ```
-
-2.  **Run the application**:
+1.  **Run the script**:
+    Execute the `main.py` file from the project's root directory:
     ```bash
     python main.py
     ```
 
-3.  **View the generated documentation**:
-    The application will fetch the code, send it to the Gemini API, and save the generated Markdown file in the `./documentation_output/` directory. The filename will follow the format `username_repository-name_documentation.md`.
+2.  **Enter GitHub Repository URL**:
+    The script will prompt you to enter the URL of the GitHub repository you wish to document:
+    ```
+    Enter the GitHub repository URL (https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME):
+    ```
+    Provide the full HTTPS URL, for example, `https://github.com/galang006/github_documentation_generator`.
 
-    A confirmation message will be printed to the console indicating the path to the generated file.
+3.  **Documentation Generation**:
+    The script will then proceed to fetch the codebase, send it to the Gemini API for analysis, and generate the documentation. This process may take a few moments depending on the size of the repository and API response times.
+
+    ```
+    Generating documentation...
+    Documentation generated and saved to ./documentation_output/galang006_github_documentation_generator_documentation.md
+    ```
+
+4.  **Output Location**:
+    The generated Markdown documentation will be saved in the `documentation_output/` directory, created automatically if it doesn't exist. The filename will follow the format `username_repo_name_documentation.md`.
 
 ## Code Structure
 
