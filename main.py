@@ -1,17 +1,25 @@
 from gemini_api.gemini_client import GeminiClient
 from github_api.github_client import get_github_code
+import os
 
 if __name__ == "__main__":
-    code = get_github_code("galang006/youtube_download")
+    output_path = "./documentation_output"
+    os.makedirs(output_path, exist_ok=True)
+    github_repo_url = "https://github.com/galang006/water_level_measurement"
+
+    github_repo_name = github_repo_url.split("github.com/")[1]
+    code = get_github_code(github_repo_name)
     client = GeminiClient()
     prompt = fprompt = f"""
         You are an expert software documentation writer.
 
-        I will provide you a codebase from GitHub as a dictionary, where each key is a file path and each value is the source code of that file.
+        I will provide you a codebase from GitHub repository {github_repo_url} as a dictionary, 
+        where each key is a file path and each value is the source code of that file.
 
         Please write a complete, clear, and professional project documentation in Markdown format based on this codebase.
 
-        The documentation should include the following sections:
+        If the dictionary keys do NOT include a file named `requirements.txt`, 
+        please write the documentation **without** a Prerequisites section.
 
         # Project Title
 
@@ -39,4 +47,13 @@ if __name__ == "__main__":
         Please generate the full Markdown documentation now.
         """
     response = client.generate_text(prompt)
-    print(response)
+    
+    username = github_repo_name.split("/")[0]
+    repo_name = github_repo_name.split("/")[1]
+    filename = f"{username}_{repo_name}_documentation.md"
+
+    full_path = os.path.join(output_path, filename)
+    with open(full_path, "w", encoding="utf-8") as f:
+        f.write(response)
+    
+    print(f"Documentation generated and saved to {full_path}")
