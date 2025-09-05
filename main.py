@@ -46,6 +46,8 @@ if __name__ == "__main__":
         {code}
 
         Please generate the full Markdown documentation now.
+
+        Use English language only
         """
     print("Generating documentation...")
     response = client.generate_text(prompt)
