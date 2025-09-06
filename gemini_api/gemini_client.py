@@ -3,10 +3,7 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
-import getpass
 import os
-
-
 
 load_dotenv()
 
@@ -63,7 +60,7 @@ class GeminiClient:
         self.chain = LLMChain(
             llm=self.llm,
             prompt=self.prompt,
-            verbose=True
+            #verbose=True
         )
 
     def generate_text(self, github_repo_url, code): 
