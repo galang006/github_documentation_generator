@@ -3,12 +3,19 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
+import getpass
+import os
+
+
 
 load_dotenv()
 
 class GeminiClient:
     def __init__(self):
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+        self.llm = ChatGoogleGenerativeAI(
+            model="gemini-2.5-flash",
+        )
+        
         self.prompt_template = """
         You are an expert software documentation writer.
 
