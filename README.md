@@ -1,110 +1,96 @@
-# AI-Powered GitHub Documentation Generator
+# GitHub Documentation Generator
 
-This project provides an automated solution for generating comprehensive project documentation in Markdown format by leveraging the Google Gemini AI model and the GitHub API. It fetches a given GitHub repository's codebase, processes it, and then uses a Large Language Model (LLM) to create a detailed documentation file, making it easier for developers to quickly understand and onboard new projects.
+This project is a Python application designed to automate the generation of comprehensive project documentation for GitHub repositories. It leverages Google's Gemini Large Language Model (LLM) to analyze a given codebase and produce clear, professional documentation in Markdown format.
 
 ## Features
--   **Automated Code Fetching**: Connects to the GitHub API to recursively retrieve all source code files from a specified public repository.
--   **AI-Powered Documentation Generation**: Utilizes the `gemini-2.5-flash` model via `langchain-google-genai` to intelligently analyze the codebase and generate structured documentation.
--   **Markdown Output**: Produces clean, readable documentation in Markdown format, ready for integration into project READMEs or other documentation platforms.
--   **Structured Output**: Organizes generated documentation into a dedicated `documentation_output` directory with clear naming conventions.
--   **Configurable LLM Prompt**: The project uses a predefined prompt template within its `GeminiClient` to guide the AI in generating high-quality, relevant documentation sections (Features, Installation, Usage, Code Structure).
+-   **Automated Documentation Generation**: Automatically fetches all relevant source code files from a specified GitHub repository.
+-   **AI-Powered Content Creation**: Utilizes the Gemini 2.5 Flash LLM via the LangChain framework to generate detailed and structured documentation.
+-   **Recursive Code Fetching**: Efficiently navigates and retrieves files from nested directories within a GitHub repository.
+-   **Markdown Output**: Generates documentation in a universally readable Markdown format, suitable for `README.md` files or project wikis.
+-   **Customizable Prompt**: The LLM interaction is guided by a predefined, structured prompt to ensure consistent and high-quality documentation output.
+-   **Environment Variable Management**: Securely handles API tokens using environment variables.
 
 ## Installation
 
-To set up and run this project locally, follow these steps:
+To set up the project locally, follow these steps:
 
-1.  **Clone the Repository (or create the files locally):**
-    First, you would typically clone the repository. As this is a hypothetical scenario for documentation generation, assume you have access to the project files.
-
-2.  **Install Dependencies:**
-    
+1.  **Clone the Repository**:
     ```bash
-    pip install python-dotenv PyGithub langchain-google-genai langchain
+    git clone https://github.com/galang006/github_documentation_generator.git
+    cd github_documentation_generator
     ```
 
-3.  **Set Up Environment Variables:**
-    The project requires API keys for both GitHub and Google Gemini.
-    Create a `.env` file in the root directory of the project and add the following:
+2.  **Create a Virtual Environment** (Recommended):
+    ```bash
+    python -m venv venv
+    # On Windows
+    .\venv\Scripts\activate
+    # On macOS/Linux
+    source venv/bin/activate
+    ```
 
+3.  **Install Dependencies**:
+    The project relies on several Python libraries. Install them using pip:
+    ```bash
+    pip install python-dotenv langchain langchain-google-genai PyGithub
+    ```
+
+4.  **Set Up Environment Variables**:
+    Create a `.env` file in the root directory of the project and add your GitHub Personal Access Token and Google Gemini API Key:
     ```
     GITHUB_TOKEN="YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"
     GOOGLE_API_KEY="YOUR_GEMINI_API_KEY"
     ```
-    -   **GitHub Token**: Generate a Personal Access Token from your GitHub developer settings. Ensure it has at least `repo` scope to access private repositories or no specific scope for public ones.
-    -   **Gemini API Key**: Obtain a Google API Key from the Google AI Studio or Google Cloud Console.
+    -   **GitHub Token**: Generate a personal access token from your GitHub settings with `repo` scope.
+    -   **Gemini API Key**: Obtain an API key from Google AI Studio.
 
 ## Usage
 
 To generate documentation for a GitHub repository:
 
-1.  **Run the `main.py` script:**
-
+1.  **Run the Main Script**:
+    Execute the `main.py` file from your terminal:
     ```bash
     python main.py
     ```
 
-2.  **Enter GitHub Repository URL:**
-    The script will prompt you to enter the full URL of the GitHub repository you wish to document:
+2.  **Enter GitHub Repository URL**:
+    The script will prompt you to enter the full URL of the GitHub repository you wish to document. For example:
+    ```
+    Enter the GitHub repository URL (https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME): https://github.com/galang006/github_documentation_generator
+    ```
 
-    ```
-    Enter the GitHub repository URL (https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME):
-    ```
-    Provide the URL, for example: `https://github.com/galang006/github_documentation_generator`
+3.  **View Generated Documentation**:
+    Once the process is complete, the documentation will be saved as a Markdown file in the `documentation_output/` directory within your project. The filename will be in the format `username_reponame_documentation.md`.
 
-3.  **View Generated Documentation:**
-    The script will then fetch the code, send it to the Gemini API, and save the generated documentation. You will see a confirmation message indicating where the documentation file has been saved:
-
+    Example output message:
     ```
-    Generating documentation...
-    Documentation generated and saved to ./documentation_output/YOUR_USERNAME_YOUR_REPOSITORY_NAME_documentation.md
+    Documentation generated and saved to ./documentation_output/galang006_github_documentation_generator_documentation.md
     ```
-    The generated Markdown file will be located in the `documentation_output/` directory, named after the GitHub username and repository.
 
 ## Code Structure
 
-The project is organized into logical modules to separate concerns between GitHub API interaction, Gemini API interaction, and the main application logic.
+The project is organized into logical modules to separate concerns and enhance maintainability:
 
 ```
-.
+github_documentation_generator/
 ├── .gitignore
 ├── main.py
 ├── gemini_api/
 │   └── gemini_client.py
 ├── github_api/
 │   └── github_client.py
-└── documentation_output/ (created at runtime)
-    └── [username]_[repo_name]_documentation.md (generated output)
+└── documentation_output/
+    └── <generated_documentation_files>.md
 ```
 
-### Main Files and Directories:
-
--   **`.gitignore`**:
-    A standard Git ignore file for Python projects, specifying files and directories that should not be tracked by Git (e.g., `__pycache__`, virtual environments, API keys, and the `documentation_output` directory).
-
+-   **`.gitignore`**: Specifies intentionally untracked files that Git should ignore, such as virtual environment folders, compiled Python files, and generated documentation output.
 -   **`main.py`**:
-    This is the entry point of the application. It orchestrates the entire process:
-    -   Prompts the user for a GitHub repository URL.
-    -   Calls `github_api.github_client` to fetch the repository's codebase.
-    -   Initializes `gemini_api.gemini_client` to interact with the Gemini LLM.
-    -   Sends the fetched code and repository URL to the Gemini client for documentation generation.
-    -   Saves the resulting Markdown documentation to a file within the `documentation_output/` directory.
-
+    -   This is the entry point of the application.
+    -   It orchestrates the entire documentation generation process: prompts for the GitHub URL, fetches code, calls the Gemini LLM, and saves the output.
 -   **`gemini_api/`**:
-    This directory contains modules related to interacting with the Google Gemini API.
-    -   **`gemini_api/gemini_client.py`**:
-        Defines the `GeminiClient` class responsible for:
-        -   Loading environment variables (e.g., `GOOGLE_API_KEY`).
-        -   Initializing the `ChatGoogleGenerativeAI` model (`gemini-2.5-flash`).
-        -   Defining the `prompt_template` that guides the LLM in generating the project documentation with specific sections (Project Title, Features, Installation, Usage, Code Structure).
-        -   Creating an `LLMChain` for structured interaction with the LLM.
-        -   The `generate_text` method takes the GitHub repository URL and the codebase dictionary as input, invokes the LLM chain, and returns the generated documentation text.
-
+    -   **`gemini_client.py`**: Contains the `GeminiClient` class responsible for interacting with the Google Gemini LLM. It loads environment variables for authentication, defines the prompt template used for documentation generation, and manages the LangChain integration.
 -   **`github_api/`**:
-    This directory contains modules for interacting with the GitHub API.
-    -   **`github_api/github_client.py`**:
-        Provides functions to fetch repository content:
-        -   `get_github_repo(repo, path="")`: A recursive function that traverses a GitHub repository, fetches the content of each file, and stores it in a dictionary where keys are file paths and values are file contents. It explicitly ignores `README.md` files.
-        -   `get_github_code(repo_name)`: Initializes the `PyGithub` client using a `GITHUB_TOKEN` from environment variables and then calls `get_github_repo` to retrieve the entire codebase for the specified repository.
-
+    -   **`github_client.py`**: Houses functions for interacting with the GitHub API. It uses the `PyGithub` library to authenticate with a GitHub token, recursively fetches all source code files from a specified repository (excluding `README.md`), and returns them as a dictionary.
 -   **`documentation_output/`**:
-    This directory is created automatically by `main.py` if it doesn't exist. It serves as the storage location for all generated Markdown documentation files. Each generated file is named using the format `YOUR_USERNAME_YOUR_REPOSITORY_NAME_documentation.md`.
+    -   This directory is created by `main.py` and serves as the destination for all generated Markdown documentation files.
