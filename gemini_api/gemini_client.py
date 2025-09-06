@@ -57,15 +57,9 @@ class GeminiClient:
             input_variables=["github_repo_url", "code"]
         )
 
-        self.chain = LLMChain(
-            llm=self.llm,
-            prompt=self.prompt,
-            #verbose=True
-        )
-
     def generate_text(self, github_repo_url, code): 
-        response = self.chain.invoke({
+        result = self.prompt | self.llm
+        return result.invoke({
             "github_repo_url": github_repo_url,
             "code": code
-        })
-        return response["text"]
+        })["text"]
